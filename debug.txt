@@ -1,0 +1,8 @@
+
+Beep once (frequency 100):
+    The robot beeps once when it is given a movment order but does not know where to go from there,
+        In robot.c -> moveMent() at default of switch statement.
+
+Beep Twice 0.5 second delay (frequency 100):
+    The robot beeps twice when the robot is unable to move in any directions,
+        In robot.c -> logicChoice() at else of any directional movement
