@@ -6,6 +6,14 @@
 #include "allcode_api.h"
 #include "robot.h"
 
+int isAWall(struct robot robot, int sensorValue){
+    
+}
+
+void fillInCell(struct robot *robot){
+
+}
+
 /*
  * Returns 0 if false
  * 1 if true
@@ -153,9 +161,10 @@ int moveMent(int direction, struct robot robot){
  * right = 2;
  * backwards = 3;
  */
-void mapMaze(struct robot robot){
+void mapMaze(struct robot *robot){
     while(1) {
-        if(mapCompleted(robot)){
+        fillInCell(robot);
+        if(mapCompleted(*robot)){
             return;
         }
         //If Facing North and North is open then forwards and not visited then forwards
@@ -163,15 +172,17 @@ void mapMaze(struct robot robot){
         //If facing North and North, East close but West open then west
         //If facing North and North, East West closed but South open
         //If facing North and North and been visited then forwards
-        if (robot.facing == FACING_NORTH) {
-            if (robot.maze[robot.xCoord][robot.yCoord].northWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_NORTH, robot)) {
-                moveMent(MOVE_NORTH, robot);
-            } else if (robot.maze[robot.xCoord][robot.yCoord].eastWall == WALL_ISNT_THERE) {
-                moveMent(MOVE_EAST, robot);
-            } else if (robot.maze[robot.xCoord][robot.yCoord].westWall == WALL_ISNT_THERE) {
-                moveMent(MOVE_WEST, robot);
-            } else if (robot.maze[robot.xCoord][robot.yCoord].southWall == WALL_ISNT_THERE) {
-                moveMent(MOVE_SOUTH, robot);
+        if (robot->facing == FACING_NORTH) {
+            if (robot->maze[robot->xCoord][robot->yCoord].northWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_NORTH, *robot)) {
+                moveMent(MOVE_NORTH, *robot);
+            } else if (robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE) {
+                moveMent(MOVE_EAST, *robot);
+            } else if (robot->maze[robot->xCoord][robot->yCoord].westWall == WALL_ISNT_THERE) {
+                moveMent(MOVE_WEST, *robot);
+            } else if (robot->maze[robot->xCoord][robot->yCoord].southWall == WALL_ISNT_THERE) {
+                moveMent(MOVE_SOUTH, *robot);
+            } else if (robot->maze[robot->xCoord][robot->yCoord].northWall == WALL_ISNT_THERE){
+                moveMent(MOVE_NORTH, *robot);
             } else {
                 //Robot is stuck
                 FA_PlayNote(100, 100);
@@ -183,39 +194,34 @@ void mapMaze(struct robot robot){
             //If facing South and West is open then forwards
             //If facing South and North is open the forwards
             //If facing South and South has been visited then forwards
-        } else if (robot.facing == FACING_SOUTH) {
-            if(robot.maze[robot.xCoord][robot.yCoord].southWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_SOUTH, robot)){
-                moveMent(MOVE_SOUTH, robot);
+        } else if (robot->facing == FACING_SOUTH) {
+            if(robot->maze[robot->xCoord][robot->yCoord].southWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_SOUTH, *robot)){
+                moveMent(MOVE_SOUTH, *robot);
+            } else if (robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE){
+                moveMent(MOVE_EAST, *robot);
+            } else if (robot->maze[robot->xCoord][robot->yCoord].westWall == WALL_ISNT_THERE){
+                moveMent(MOVE_WEST, *robot);
+            } else if (robot->maze[robot->xCoord][robot->yCoord].northWall == WALL_ISNT_THERE){
+
             }
             //If facing West and West and not been visited then forwards
             //If facing West and North is open then north
             //If facing West and South is open then south
             //If facing West and East is open then east
             //If facing West and West is open and has been visited then forwards
-        } else if (robot.facing == FACING_WEST){
-            if(robot.maze[robot.xCoord][robot.yCoord].westWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_WEST, robot)){
-                moveMent(MOVE_WEST, robot);
+        } else if (robot->facing == FACING_WEST){
+            if(robot->maze[robot->xCoord][robot->yCoord].westWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_WEST, *robot)){
+                moveMent(MOVE_WEST, *robot);
             }
             //If facing East and East is open and has not been visited then forwards
             //If facing East and South is open then South
             //If facing East and North is open then North
             //If facing East and West is open then West
             //If facing East and East is open and has been visited then forwards
-        } else if (robot.facing == FACING_EAST){
-            if(robot.maze[robot.xCoord][robot.yCoord].eastWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_EAST, robot)){
-                moveMent(MOVE_EAST, robot);
+        } else if (robot->facing == FACING_EAST){
+            if(robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_EAST, *robot)){
+                moveMent(MOVE_EAST, *robot);
             }
         }
     }
-}
-
-/*
- * Returns 1 if possible and 0 if not possible to move
- */
-int isPossible(struct robot robot){
-    return 0;
-}
-
-void fillInCell(struct robot *robot){
-
 }
