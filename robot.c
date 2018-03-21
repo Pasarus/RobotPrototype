@@ -6,6 +6,23 @@
 #include "allcode_api.h"
 #include "robot.h"
 
+/*
+ * Returns 0 if false
+ * 1 if true
+ */
+int mapCompleted(struct robot robot){
+    for(int i = 0; i<4; i++){
+        for(int j = 0; j<4; j++){
+            if(robot.maze[i][j].visited == 0){
+                //Then maze is not completed
+                return 0;
+            }
+        }
+    }
+    //If the maze has been completed then return true.
+    return 1;
+}
+
 void moveToNextCell(){
     //Move forward given distance to next cell
 }
@@ -128,47 +145,38 @@ int moveMent(int direction, struct robot robot){
  * right = 2;
  * backwards = 3;
  */
-int logicChoice(struct robot robot){
-    //If map is not completed, then continue
-    if(mapCompleted(robot)){
-
-    }
-
-
-
-
-
-
-
-
-
-    //If Facing North and North then forwards
-    //If facing North and North closed but East open then east
-    //If facing North and North, East close but West open then west
-    //If facing North and North, East West closed but South open
-    if(robot.facing == FACING_NORTH){
-        if(robot.maze[robot.xCoord][robot.yCoord].northWall == WALL_ISNT_THERE){
-            moveMent(MOVE_NORTH, robot);
-        }else if(robot.maze[robot.xCoord][robot.yCoord].eastWall == WALL_ISNT_THERE){
-            moveMent(MOVE_EAST, robot);
-        }else if(robot.maze[robot.xCoord][robot.yCoord].westWall == WALL_ISNT_THERE){
-            moveMent(MOVE_WEST, robot);
-        }else if(robot.maze[robot.xCoord][robot.yCoord].southWall == WALL_ISNT_THERE){
-            moveMent(MOVE_SOUTH, robot);
-        }else{
-            //Robot is stuck
-            FA_PlayNote(100,100);
-            FA_DelayMillis(500);
-            FA_PlayNote(100,100);
+void mapMaze(struct robot robot){
+    while(1) {
+        if(mapCompleted(robot)){
+            return;
         }
-    //If facing South and South is open the forwards
-    //If facing South and East is open then forwards
-    //If facing South and West is open then forwards
-    //If facing South and North is open the forwards
-    } else if(robot.facing == FACING_SOUTH){
+        //If Facing North and North then forwards
+        //If facing North and North closed but East open then east
+        //If facing North and North, East close but West open then west
+        //If facing North and North, East West closed but South open
+        if (robot.facing == FACING_NORTH) {
+            if (robot.maze[robot.xCoord][robot.yCoord].northWall == WALL_ISNT_THERE) {
+                moveMent(MOVE_NORTH, robot);
+            } else if (robot.maze[robot.xCoord][robot.yCoord].eastWall == WALL_ISNT_THERE) {
+                moveMent(MOVE_EAST, robot);
+            } else if (robot.maze[robot.xCoord][robot.yCoord].westWall == WALL_ISNT_THERE) {
+                moveMent(MOVE_WEST, robot);
+            } else if (robot.maze[robot.xCoord][robot.yCoord].southWall == WALL_ISNT_THERE) {
+                moveMent(MOVE_SOUTH, robot);
+            } else {
+                //Robot is stuck
+                FA_PlayNote(100, 100);
+                FA_DelayMillis(500);
+                FA_PlayNote(100, 100);
+            }
+            //If facing South and South is open the forwards
+            //If facing South and East is open then forwards
+            //If facing South and West is open then forwards
+            //If facing South and North is open the forwards
+        } else if (robot.facing == FACING_SOUTH) {
 
+        }
     }
-    return 0;
 }
 
 /*
@@ -180,12 +188,4 @@ int isPossible(struct robot robot){
 
 void fillInCell(struct robot *robot){
 
-}
-
-/*
- * Returns 0 if false
- * 1 if true
- */
-int mapCompleted(struct robot robot){
-    return 0;
 }
