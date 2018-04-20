@@ -5,7 +5,6 @@
 #ifndef ROBOTPROTOTYPE_ROBOT_C_H
 #define ROBOTPROTOTYPE_ROBOT_C_H
 
-#include "robot.c"
 #include "states.h"
 #include <stdio.h>
 #include "allcode_api.h"
@@ -15,8 +14,19 @@
 #define MOVE_WEST 2
 #define MOVE_SOUTH 3
 
-int moveMent(int, struct robot);
-int logicChoice(struct robot);
-int isPossible(struct robot);
+int moveMent(int, struct robot*);
+int isShaded();
+int isAWall(struct robot, int);
+void fillInCell(struct robot*);
+int mapCompleted(struct robot);
+int hasNeighbourBeenVisited(int ,struct robot);
+void moveToNextCell();
+void moveEast(struct robot*);
+void moveWest(struct robot*);
+void moveNorth(struct robot*);
+void moveSouth(struct robot*);
+void mapMaze(struct robot*);
+
+
 
 #endif //ROBOTPROTOTYPE_ROBOT_C_H

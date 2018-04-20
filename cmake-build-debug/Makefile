@@ -48,24 +48,13 @@ RM = /cygdrive/c/Users/srj12/.CLion2016.3/system/cygwin_cmake/bin/cmake.exe -E r
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /cygdrive/m/documents/CS26020/RobotPrototype
+CMAKE_SOURCE_DIR = /cygdrive/m/documents/CS26020/RobotPrototype2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug
+CMAKE_BINARY_DIR = /cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/cygdrive/c/Users/srj12/.CLion2016.3/system/cygwin_cmake/bin/cmake.exe -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -78,11 +67,22 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/cygdrive/c/Users/srj12/.CLion2016.3/system/cygwin_cmake/bin/cmake.exe -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug/CMakeFiles /cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug/CMakeFiles /cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named RobotPrototype
+# Target rules for targets named RobotPrototype2
 
 # Build rule for target.
-RobotPrototype: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 RobotPrototype
-.PHONY : RobotPrototype
+RobotPrototype2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 RobotPrototype2
+.PHONY : RobotPrototype2
 
 # fast build rule for target.
-RobotPrototype/fast:
-	$(MAKE) -f CMakeFiles/RobotPrototype.dir/build.make CMakeFiles/RobotPrototype.dir/build
-.PHONY : RobotPrototype/fast
+RobotPrototype2/fast:
+	$(MAKE) -f CMakeFiles/RobotPrototype2.dir/build.make CMakeFiles/RobotPrototype2.dir/build
+.PHONY : RobotPrototype2/fast
 
 main.o: main.c.o
 
@@ -129,7 +129,7 @@ main.o: main.c.o
 
 # target to build an object file
 main.c.o:
-	$(MAKE) -f CMakeFiles/RobotPrototype.dir/build.make CMakeFiles/RobotPrototype.dir/main.c.o
+	$(MAKE) -f CMakeFiles/RobotPrototype2.dir/build.make CMakeFiles/RobotPrototype2.dir/main.c.o
 .PHONY : main.c.o
 
 main.i: main.c.i
@@ -138,7 +138,7 @@ main.i: main.c.i
 
 # target to preprocess a source file
 main.c.i:
-	$(MAKE) -f CMakeFiles/RobotPrototype.dir/build.make CMakeFiles/RobotPrototype.dir/main.c.i
+	$(MAKE) -f CMakeFiles/RobotPrototype2.dir/build.make CMakeFiles/RobotPrototype2.dir/main.c.i
 .PHONY : main.c.i
 
 main.s: main.c.s
@@ -147,7 +147,7 @@ main.s: main.c.s
 
 # target to generate assembly for a file
 main.c.s:
-	$(MAKE) -f CMakeFiles/RobotPrototype.dir/build.make CMakeFiles/RobotPrototype.dir/main.c.s
+	$(MAKE) -f CMakeFiles/RobotPrototype2.dir/build.make CMakeFiles/RobotPrototype2.dir/main.c.s
 .PHONY : main.c.s
 
 robot.o: robot.c.o
@@ -156,7 +156,7 @@ robot.o: robot.c.o
 
 # target to build an object file
 robot.c.o:
-	$(MAKE) -f CMakeFiles/RobotPrototype.dir/build.make CMakeFiles/RobotPrototype.dir/robot.c.o
+	$(MAKE) -f CMakeFiles/RobotPrototype2.dir/build.make CMakeFiles/RobotPrototype2.dir/robot.c.o
 .PHONY : robot.c.o
 
 robot.i: robot.c.i
@@ -165,7 +165,7 @@ robot.i: robot.c.i
 
 # target to preprocess a source file
 robot.c.i:
-	$(MAKE) -f CMakeFiles/RobotPrototype.dir/build.make CMakeFiles/RobotPrototype.dir/robot.c.i
+	$(MAKE) -f CMakeFiles/RobotPrototype2.dir/build.make CMakeFiles/RobotPrototype2.dir/robot.c.i
 .PHONY : robot.c.i
 
 robot.s: robot.c.s
@@ -174,7 +174,7 @@ robot.s: robot.c.s
 
 # target to generate assembly for a file
 robot.c.s:
-	$(MAKE) -f CMakeFiles/RobotPrototype.dir/build.make CMakeFiles/RobotPrototype.dir/robot.c.s
+	$(MAKE) -f CMakeFiles/RobotPrototype2.dir/build.make CMakeFiles/RobotPrototype2.dir/robot.c.s
 .PHONY : robot.c.s
 
 # Help Target
@@ -183,9 +183,9 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... RobotPrototype"
+	@echo "... rebuild_cache"
+	@echo "... RobotPrototype2"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

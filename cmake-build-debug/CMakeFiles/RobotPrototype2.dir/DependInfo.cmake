@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/cygdrive/m/documents/CS26020/RobotPrototype/main.c" "/cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug/CMakeFiles/RobotPrototype.dir/main.c.o"
-  "/cygdrive/m/documents/CS26020/RobotPrototype/robot.c" "/cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug/CMakeFiles/RobotPrototype.dir/robot.c.o"
+  "/cygdrive/m/documents/CS26020/RobotPrototype2/main.c" "/cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug/CMakeFiles/RobotPrototype2.dir/main.c.o"
+  "/cygdrive/m/documents/CS26020/RobotPrototype2/robot.c" "/cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug/CMakeFiles/RobotPrototype2.dir/robot.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

@@ -1,0 +1,1 @@
+/usr/bin/cc  -g  -Wl,--enable-auto-import CMakeFiles/RobotPrototype2.dir/main.c.o CMakeFiles/RobotPrototype2.dir/robot.c.o ../allcode_api.o ../main.o ../robot.o  -o RobotPrototype2.exe -Wl,--out-implib,libRobotPrototype2.dll.a -Wl,--major-image-version,0,--minor-image-version,0 

@@ -1,4 +1,4 @@
-# Install script for directory: /cygdrive/m/documents/CS26020/RobotPrototype
+# Install script for directory: /cygdrive/m/documents/CS26020/RobotPrototype2
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,5 +35,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

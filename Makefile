@@ -1,0 +1,26 @@
+# MPLAB IDE generated this makefile for use with GNU make.
+# Project: RobotPrototype2.mcp
+# Date: Thu Apr 19 14:38:06 2018
+
+AS = xc16-as.exe
+CC = xc16-gcc.exe
+LD = xc16-ld.exe
+AR = xc16-ar.exe
+HX = xc16-bin2hex.exe
+RM = rm
+
+RobotPrototype2.hex : RobotPrototype2.cof
+	$(HX) "RobotPrototype2.cof" -omf=coff
+
+RobotPrototype2.cof : main.o robot.o
+	$(CC) -omf=coff -mcpu=33EP256MU810 "main.o" "robot.o" "M:\documents\CS26020\RobotPrototype2\allcode_api.o" -o"RobotPrototype2.cof" -Wl,-Tp33EP256MU810.gld,--defsym=__MPLAB_BUILD=1,--defsym=__MPLAB_DEBUG=1,-Map="RobotPrototype2.map",--report-mem
+
+main.o : allcode_api.h c:/program\ files\ (x86)/microchip/xc16/v1.33/include/lega-c/yvals.h c:/program\ files\ (x86)/microchip/xc16/v1.33/include/lega-c/stdio.h c:/program\ files\ (x86)/microchip/xc16/v1.33/include/lega-c/stdbool.h states.h robot.h main.c
+	$(CC) -omf=coff -mcpu=33EP256MU810 -x c -c "main.c" -o"main.o" -D__DEBUG -g -Wall
+
+robot.o : c:/program\ files\ (x86)/microchip/xc16/v1.33/include/lega-c/yvals.h c:/program\ files\ (x86)/microchip/xc16/v1.33/include/lega-c/stdio.h states.h robot.h c:/program\ files\ (x86)/microchip/xc16/v1.33/include/lega-c/stdbool.h allcode_api.h robot.c
+	$(CC) -omf=coff -mcpu=33EP256MU810 -x c -c "robot.c" -o"robot.o" -D__DEBUG -g -Wall
+
+clean : 
+	$(RM) "main.o" "robot.o" "RobotPrototype2.cof" "RobotPrototype2.hex"
+

@@ -15,23 +15,17 @@
 #define WALL_IS_THERE 1
 #define WALL_ISNT_THERE 0
 
-#define STARTING_X 3
+#define STARTING_X 2 //Because it's the third cell along
 #define STARTING_Y 0
 #define STARTING_FACE 3
 
-/*
- * The basic data structure representing the robot's data
- * facing = 0; North
- * facing = 1; East
- * facing = 2; West
- * facing = 3; South
- */
-typedef struct robot {
-    struct cell maze[4][4];
-    int facing;
-    int xCoord;
-    int yCoord;
-};
+//If greater than or equal to IS_WALL we will assume there is a wall there else not
+#define IS_WALL 100
+
+#define LIGHT_SHADE 700
+
+#define TURN_RIGHT_ANGLE 90
+#define TURN_LEFT_ANGLE 90
 
 /*
  * int northWall = 0;
@@ -53,6 +47,20 @@ typedef struct cell {
     int southWall;
     int shade;
     int visited;
+};
+
+/*
+ * The basic data structure representing the robot's data
+ * facing = 0; North
+ * facing = 1; East
+ * facing = 2; West
+ * facing = 3; South
+ */
+typedef struct robot {
+    struct cell maze[4][4];
+    int facing;
+    int xCoord;
+    int yCoord;
 };
 
 #endif //ROBOTPROTOTYPE_ROBOT_H

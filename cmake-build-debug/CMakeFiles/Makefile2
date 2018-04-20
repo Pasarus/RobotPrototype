@@ -54,45 +54,45 @@ RM = /cygdrive/c/Users/srj12/.CLion2016.3/system/cygwin_cmake/bin/cmake.exe -E r
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /cygdrive/m/documents/CS26020/RobotPrototype
+CMAKE_SOURCE_DIR = /cygdrive/m/documents/CS26020/RobotPrototype2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug
+CMAKE_BINARY_DIR = /cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug
 
 #=============================================================================
-# Target rules for target CMakeFiles/RobotPrototype.dir
+# Target rules for target CMakeFiles/RobotPrototype2.dir
 
 # All Build rule for target.
-CMakeFiles/RobotPrototype.dir/all:
-	$(MAKE) -f CMakeFiles/RobotPrototype.dir/build.make CMakeFiles/RobotPrototype.dir/depend
-	$(MAKE) -f CMakeFiles/RobotPrototype.dir/build.make CMakeFiles/RobotPrototype.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug/CMakeFiles --progress-num=1,2,3 "Built target RobotPrototype"
-.PHONY : CMakeFiles/RobotPrototype.dir/all
+CMakeFiles/RobotPrototype2.dir/all:
+	$(MAKE) -f CMakeFiles/RobotPrototype2.dir/build.make CMakeFiles/RobotPrototype2.dir/depend
+	$(MAKE) -f CMakeFiles/RobotPrototype2.dir/build.make CMakeFiles/RobotPrototype2.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug/CMakeFiles --progress-num=1,2,3 "Built target RobotPrototype2"
+.PHONY : CMakeFiles/RobotPrototype2.dir/all
 
 # Include target in all.
-all: CMakeFiles/RobotPrototype.dir/all
+all: CMakeFiles/RobotPrototype2.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/RobotPrototype.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/RobotPrototype.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/m/documents/CS26020/RobotPrototype/cmake-build-debug/CMakeFiles 0
-.PHONY : CMakeFiles/RobotPrototype.dir/rule
+CMakeFiles/RobotPrototype2.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug/CMakeFiles 3
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/RobotPrototype2.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/m/documents/CS26020/RobotPrototype2/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/RobotPrototype2.dir/rule
 
 # Convenience name for target.
-RobotPrototype: CMakeFiles/RobotPrototype.dir/rule
+RobotPrototype2: CMakeFiles/RobotPrototype2.dir/rule
 
-.PHONY : RobotPrototype
-
-# clean rule for target.
-CMakeFiles/RobotPrototype.dir/clean:
-	$(MAKE) -f CMakeFiles/RobotPrototype.dir/build.make CMakeFiles/RobotPrototype.dir/clean
-.PHONY : CMakeFiles/RobotPrototype.dir/clean
+.PHONY : RobotPrototype2
 
 # clean rule for target.
-clean: CMakeFiles/RobotPrototype.dir/clean
+CMakeFiles/RobotPrototype2.dir/clean:
+	$(MAKE) -f CMakeFiles/RobotPrototype2.dir/build.make CMakeFiles/RobotPrototype2.dir/clean
+.PHONY : CMakeFiles/RobotPrototype2.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/RobotPrototype2.dir/clean
 
 .PHONY : clean
 
