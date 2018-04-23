@@ -22,10 +22,10 @@
 //If greater than or equal to IS_WALL we will assume there is a wall there else not
 #define IS_WALL 100
 
-#define LIGHT_SHADE 700
+#define LIGHT_SHADE 100
 
 #define TURN_RIGHT_ANGLE 90
-#define TURN_LEFT_ANGLE 90
+#define TURN_LEFT_ANGLE 89
 
 /*
  * int northWall = 0;
@@ -47,6 +47,7 @@ typedef struct cell {
     int southWall;
     int shade;
     int visited;
+    int breadCrumb;
 };
 
 /*
@@ -61,6 +62,7 @@ typedef struct robot {
     int facing;
     int xCoord;
     int yCoord;
+    int currentBreadCrumbNumber;
 };
 
 #endif //ROBOTPROTOTYPE_ROBOT_H

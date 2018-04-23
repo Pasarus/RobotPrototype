@@ -18,7 +18,7 @@ int moveMent(int, struct robot*);
 int isShaded();
 int isAWall(struct robot, int);
 void fillInCell(struct robot*);
-int mapCompleted(struct robot);
+int mapCompleted(struct robot*);
 int hasNeighbourBeenVisited(int ,struct robot);
 void moveToNextCell();
 void moveEast(struct robot*);
@@ -26,6 +26,7 @@ void moveWest(struct robot*);
 void moveNorth(struct robot*);
 void moveSouth(struct robot*);
 void mapMaze(struct robot*);
+void pathingBack(struct robot*);
 
 
 

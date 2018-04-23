@@ -6,9 +6,15 @@
 #include "robot.h"
 #include "states.h"
 
+//todo when shaded hard code reverse decision
 int isShaded(){
+    char message[40];
+    sprintf(message, "Light Level: %d\n", FA_ReadLight());
+    FA_BTSendString(message, 40);
     return FA_ReadLight() <= LIGHT_SHADE;
 }
+
+
 
 /*
  * It is a wall if the IR sensor is greater than the value
@@ -100,8 +106,17 @@ void fillInCell(struct robot *robot){
     robot->maze[xCoord][yCoord].westWall = isAWall(*robot, FACING_WEST);
     //Check the South Wall
     robot->maze[xCoord][yCoord].southWall = isAWall(*robot, FACING_SOUTH);
+    //Update whether or not to add a breadcrumb tracker
+    if (robot->currentBreadCrumbNumber >= 1){
+        robot->currentBreadCrumbNumber++;
+        robot->maze[robot->xCoord][robot->yCoord].breadCrumb = robot->currentBreadCrumbNumber;
+    }
     //Update Shade
-    robot->maze[xCoord][yCoord].shade = isShaded();
+    if (isShaded()){
+        robot->maze[xCoord][yCoord].shade = true;
+        robot->maze[xCoord][yCoord].breadCrumb = 1;
+        robot->currentBreadCrumbNumber = 1;
+    }
     //Update visited
     robot->maze[xCoord][yCoord].visited = 1;
 }
@@ -110,11 +125,11 @@ void fillInCell(struct robot *robot){
  * Returns 0 if false
  * 1 if true
  */
-int mapCompleted(struct robot robot){
+int mapCompleted(struct robot *robot){
     int i, j;
     for(i = 0; i<4; i++){
         for(j = 0; j<4; j++){
-            if(robot.maze[i][j].visited == 0){
+            if(robot->maze[i][j].visited == 0){
                 //Then maze is not completed
                 FA_BTSendString("Maze not complete!\n", 40);
                 return false;
@@ -135,27 +150,15 @@ int hasNeighbourBeenVisited(int direction ,struct robot robot){
     switch(direction){
         case FACING_NORTH:
             //If checking North
-            if(robot.yCoord-1 > 3 || robot.yCoord-1 < 0){
-                return true;
-            }
             return robot.maze[robot.yCoord-1][robot.xCoord].visited;
         case FACING_EAST:
             //If checking East
-            if(robot.xCoord+1 > 3 || robot.xCoord+1 < 0){
-                return true;
-            }
             return robot.maze[robot.yCoord][robot.xCoord+1].visited;
         case FACING_SOUTH:
             //If checking South
-            if(robot.yCoord+1 > 3 || robot.yCoord+1 < 0){
-                return true;
-            }
             return robot.maze[robot.yCoord+1][robot.xCoord].visited;
         case FACING_WEST:
             //If checking West
-            if(robot.yCoord-1 > 3 || robot.yCoord-1 < 0){
-                return true;
-            }
             return robot.maze[robot.yCoord][robot.xCoord-1].visited;
         default:
             FA_PlayNote(100,100);
@@ -173,7 +176,7 @@ void moveToNextCell(){
     // 1 unit = 0.32 mm of travel
     // 150 / 0.32 = 468.75 Therefore roughly 469
 
-    FA_SetDriveSpeed(20);
+    FA_SetDriveSpeed(30);
     FA_Forwards(150);
 
     /*FA_ResetEncoders();
@@ -188,7 +191,10 @@ void moveToNextCell(){
     FA_SetMotors(0,0);
     FA_ResetEncoders();*/
 }
-
+//Moving North = y-1
+//Moving South = y+1
+//Moving West = x-1
+//Moving East = x+1
 void moveEast(struct robot *robot){
     //If facing North rotate 90 right then forwards
     //If facing East rotate 0 then forwards
@@ -341,36 +347,65 @@ void mapMaze(struct robot *robot){
                 robot->yCoord,
                 robot->facing
         );
+
+        char message2[40];
+        sprintf(message2, "BreadCrumb number: %d\n", robot->maze[robot->xCoord][robot->yCoord].breadCrumb);
+        FA_BTSendString(message2,40);
+
         FA_BTSendString(message,40);
 
-
         fillInCell(robot);
-        if(mapCompleted(*robot)){
+        if(mapCompleted(robot)){
             return;
         }
 
+        if (robot->maze[robot->xCoord][robot->yCoord].shade == true){
+            FA_BTSendString("The cell is shaded!!!!!\n",40);
+            if(robot->facing == FACING_NORTH){
+                moveMent(MOVE_SOUTH, robot);
+            } else if (robot->facing == FACING_EAST){
+                moveMent(MOVE_WEST, robot);
+            } else if (robot->facing == FACING_WEST){
+                moveMent(MOVE_EAST, robot);
+            } else if (robot->facing == FACING_SOUTH){
+                moveMent(MOVE_NORTH, robot);
+            } else {
+                FA_BTSendString("The robot face is wrong\n",40);
+            }
+        }
+
         //ADDED LOGIC THAT MAY NEED REMOVING STARTS ----------------------------
-        //todo add a check to this code to check for a wall on west
-        //If Facing North and West is not visited and no west wall then go west
-        if(robot->facing == FACING_NORTH && !hasNeighbourBeenVisited(FACING_WEST, *robot) &&
-                robot->maze[robot->yCoord][robot->xCoord].westWall == WALL_ISNT_THERE){
-            moveMent(MOVE_WEST, robot);
+        //Currently this focuses on making the robot turn right if it can and it has not been visited, if not then it shall do the normal stuff
+        else if (robot->facing == FACING_NORTH && robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE){
+            FA_BTSendString("Turning Right!\n", 40);
+            moveMent(FACING_EAST, robot);
+        } else if (robot->facing == FACING_EAST && robot->maze[robot->xCoord][robot->yCoord].southWall == WALL_ISNT_THERE){
+            FA_BTSendString("Turning Right!\n", 40);
+            moveMent(FACING_SOUTH, robot);
+        } else if (robot->facing == FACING_WEST && robot->maze[robot->xCoord][robot->yCoord].northWall == WALL_ISNT_THERE){
+            FA_BTSendString("Turning Right!\n", 40);
+            moveMent(FACING_NORTH, robot);
+        } else if (robot->facing == FACING_SOUTH && robot->maze[robot->xCoord][robot->yCoord].westWall == WALL_ISNT_THERE){
+            FA_BTSendString("Turning Right!\n", 40);
+            moveMent(FACING_WEST, robot);
         }
-        //If Facing West and South not visited and no south wall then go south
-        else if (robot->facing == FACING_WEST && !hasNeighbourBeenVisited(FACING_SOUTH, *robot) &&
-                robot->maze[robot->yCoord][robot->xCoord].southWall == WALL_ISNT_THERE){
-            moveMent(MOVE_SOUTH, robot);
+
+        //ADDED EXTRA LOGIC THAT MAY NEED REMOVING STARTS -----------------------------------
+/*
+        else if(robot->facing == FACING_NORTH && robot->maze[robot->xCoord][robot->yCoord].westWall == WALL_ISNT_THERE){
+            FA_BTSendString("Turning Left!\n", 40);
+            moveMent(FACING_WEST, robot);
+        } else if (robot->facing == FACING_EAST && robot->maze[robot->xCoord][robot->yCoord].northWall == WALL_ISNT_THERE){
+            FA_BTSendString("Turning Left!\n", 40);
+            moveMent(FACING_NORTH, robot);
+        } else if (robot->facing == FACING_WEST && robot->maze[robot->xCoord][robot->yCoord].southWall == WALL_ISNT_THERE){
+            FA_BTSendString("Turning Left!\n", 40);
+            moveMent(FACING_SOUTH, robot);
+        } else if (robot->facing == FACING_SOUTH && robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE){
+            FA_BTSendString("Turning Left!\n", 40);
+            moveMent(FACING_EAST, robot);
         }
-        //If Facing South and East not visited and no east wall then go east.
-        else if (robot->facing == FACING_SOUTH && !hasNeighbourBeenVisited(FACING_EAST, *robot) &&
-                robot->maze[robot->yCoord][robot->xCoord].eastWall == WALL_ISNT_THERE){
-            moveMent(MOVE_EAST, robot);
-        }
-        //If Facing East and North not visited and no north wall then go North
-        else if (robot->facing == FACING_EAST && !hasNeighbourBeenVisited(FACING_NORTH, *robot) &&
-                robot->maze[robot->yCoord][robot->xCoord].northWall == WALL_ISNT_THERE){
-            moveMent(MOVE_NORTH, robot);
-        }
+        */
         //ADDED LOGIC THAT MAY NEED REMOVING ENDS --------------------------------
 
         //If Facing North and North is open then forwards and not visited then forwards
@@ -379,7 +414,7 @@ void mapMaze(struct robot *robot){
         //If facing North and North, East West closed but South open
         //If facing North and North and been visited then forwards
         else if (robot->facing == FACING_NORTH) {
-            if (robot->maze[robot->xCoord][robot->yCoord].northWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_NORTH, *robot)) {
+            if (robot->maze[robot->xCoord][robot->yCoord].northWall == WALL_ISNT_THERE) {
                 moveMent(MOVE_NORTH, robot);
             } else if (robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE) {
                 moveMent(MOVE_EAST, robot);
@@ -401,12 +436,12 @@ void mapMaze(struct robot *robot){
             //If facing South and North is open the forwards
             //If facing South and South has been visited then forwards
         } else if (robot->facing == FACING_SOUTH) {
-            if(robot->maze[robot->xCoord][robot->yCoord].southWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_SOUTH, *robot)){
+            if(robot->maze[robot->xCoord][robot->yCoord].southWall == WALL_ISNT_THERE){
                 moveMent(MOVE_SOUTH, robot);
-            } else if (robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE){
-                moveMent(MOVE_EAST, robot);
             } else if (robot->maze[robot->xCoord][robot->yCoord].westWall == WALL_ISNT_THERE){
                 moveMent(MOVE_WEST, robot);
+            } else if (robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE){
+                moveMent(MOVE_EAST, robot);
             } else if (robot->maze[robot->xCoord][robot->yCoord].northWall == WALL_ISNT_THERE){
                 moveMent(MOVE_NORTH, robot);
             } else if (robot->maze[robot->xCoord][robot->yCoord].southWall == WALL_ISNT_THERE){
@@ -423,14 +458,14 @@ void mapMaze(struct robot *robot){
             //If facing West and East is open then east
             //If facing West and West is open and has been visited then forwards
         } else if (robot->facing == FACING_WEST){
-            if(robot->maze[robot->xCoord][robot->yCoord].westWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_WEST, *robot)){
+            if(robot->maze[robot->xCoord][robot->yCoord].westWall == WALL_ISNT_THERE){
                 moveMent(MOVE_WEST, robot);
             } else if (robot->maze[robot->xCoord][robot->yCoord].northWall == WALL_ISNT_THERE){
                 moveMent(MOVE_NORTH, robot);
             } else if (robot->maze[robot->xCoord][robot->yCoord].southWall == WALL_ISNT_THERE){
                 moveMent(MOVE_SOUTH, robot);
             } else if (robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE){
-                moveMent(MOVE_SOUTH, robot);
+                moveMent(MOVE_EAST, robot);
             } else if (robot->maze[robot->xCoord][robot->yCoord].westWall == WALL_ISNT_THERE){
                 moveMent(MOVE_WEST, robot);
             } else {
@@ -445,7 +480,7 @@ void mapMaze(struct robot *robot){
             //If facing East and West is open then West
             //If facing East and East is open and has been visited then forwards
         } else if (robot->facing == FACING_EAST){
-            if(robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE && !hasNeighbourBeenVisited(MOVE_EAST, *robot)){
+            if(robot->maze[robot->xCoord][robot->yCoord].eastWall == WALL_ISNT_THERE){
                 moveMent(MOVE_EAST, robot);
             } else if (robot->maze[robot->xCoord][robot->yCoord].southWall == WALL_ISNT_THERE){
                 moveMent(MOVE_SOUTH, robot);
@@ -465,4 +500,84 @@ void mapMaze(struct robot *robot){
         //Take a breather so it doesn't look stupid
         FA_DelayMillis(1000);
     }
+}
+
+//todo optimise to follow the lowest breadcrumb in neighbouring cells - currently just follows lowest
+void pathingBack(struct robot *robot){
+//Moving North = y-1
+//Moving South = y+1
+//Moving West = x-1
+//Moving East = x+1
+    while(1){
+        int x = robot->xCoord;
+        int y = robot->yCoord;
+        struct cell cell = robot->maze[x][y];
+
+        //Send currentCoords and facing to Serial
+        char message[40];
+        sprintf(message,"X_%d_Y_%d_FACE_%d\n",
+                robot->xCoord,
+                robot->yCoord,
+                robot->facing
+        );
+
+        char message2[40];
+        sprintf(message2, "BreadCrumb number: %d\n", robot->maze[robot->xCoord][robot->yCoord].breadCrumb);
+        FA_BTSendString(message2,40);
+
+        FA_BTSendString(message,40);
+
+
+        //If shaded return out of function
+        if(cell.shade){
+            return;
+        }
+        //Else do all the other pathing code
+        //IF north wall clear and north wall has breadcrumb 1 less to current breadcrumb then go here
+        /*
+        if (cell.northWall == WALL_ISNT_THERE && robot->maze[x][y-1].breadCrumb == robot->currentBreadCrumbNumber-1){
+            moveMent(MOVE_NORTH, robot);
+            robot->currentBreadCrumbNumber = robot->maze[robot->xCoord][robot->yCoord].breadCrumb;
+        } else if (cell.westWall == WALL_ISNT_THERE && robot->maze[x-1][y].breadCrumb == robot->currentBreadCrumbNumber-1){
+            moveMent(MOVE_WEST, robot);
+            robot->currentBreadCrumbNumber = robot->maze[robot->xCoord][robot->yCoord].breadCrumb;
+        } else if (cell.eastWall == WALL_ISNT_THERE && robot->maze[x+1][y].breadCrumb == robot->currentBreadCrumbNumber-1){
+            moveMent(MOVE_EAST, robot);
+            robot->currentBreadCrumbNumber = robot->maze[robot->xCoord][robot->yCoord].breadCrumb;
+        } else if (cell.southWall == WALL_ISNT_THERE && robot->maze[x][y+1].breadCrumb == robot->currentBreadCrumbNumber-1){
+            moveMent(MOVE_SOUTH, robot);
+            robot->currentBreadCrumbNumber = robot->maze[robot->xCoord][robot->yCoord].breadCrumb;
+        }*/
+
+        int north, east, west, south;
+
+        if(robot->maze[x][y].northWall == WALL_ISNT_THERE) north = robot->maze[x][y-1].breadCrumb; else north = 0;
+        if(robot->maze[x][y].eastWall == WALL_ISNT_THERE) east = robot->maze[x+1][y].breadCrumb; else east = 0;
+        if(robot->maze[x][y].westWall == WALL_ISNT_THERE) west = robot->maze[x-1][y].breadCrumb; else west = 0;
+        if(robot->maze[x][y].southWall == WALL_ISNT_THERE) south = robot->maze[x][y+1].breadCrumb; else south = 0;
+
+        if (north == 0) north = 9999;
+        if (east == 0) east = 9999;
+        if (west == 0) west = 9999;
+        if (south == 0) south = 9999;
+
+        char message3[70];
+        sprintf(message3,
+                "North: %d\nEast: %d\nWest: %d\nSouth%d\n",
+                north, east, west, south);
+        FA_BTSendString(message3, 70);
+
+        //decide the largest one
+        if(north < east && north < west && north < south){
+            moveMent(MOVE_NORTH, robot);
+        } else if (east < west && east < south){
+            moveMent(MOVE_EAST, robot);
+        } else if ( west < south){
+            moveMent(MOVE_WEST, robot);
+        } else {
+            moveMent(MOVE_SOUTH, robot);
+        }
+
+    }
+
 }
