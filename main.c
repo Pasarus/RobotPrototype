@@ -10,7 +10,6 @@ int main() {
 
     FA_PlayNote(100,100);
 
-
     struct robot robot = {0};
     robot.yCoord = STARTING_Y;
     robot.xCoord = STARTING_X;
@@ -36,6 +35,8 @@ int main() {
             if(isShaded()){
                 pathingComplete = true;
                 FA_PlayNote(100,1000);
+                FA_LCDClear();
+                FA_LCDPrint("Done!",10,0,0,FONT_NORMAL, LCD_OPAQUE);
             }
         }
     }

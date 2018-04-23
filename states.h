@@ -27,6 +27,11 @@
 #define TURN_RIGHT_ANGLE 90
 #define TURN_LEFT_ANGLE 89
 
+#define IS_CELL_LINE 20
+
+#define TOO_CLOSE_WALL 300
+#define STOP_FORWARD_DISTANCE 700
+
 /*
  * int northWall = 0;
  * int eastWall = 1;

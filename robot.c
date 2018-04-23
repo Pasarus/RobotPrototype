@@ -141,33 +141,6 @@ int mapCompleted(struct robot *robot){
     return true;
 }
 
-/*
- * Returns 0 if false
- * 1 if true or cell is invalid
- */
-int hasNeighbourBeenVisited(int direction ,struct robot robot){
-    //If neighbour is out of bounds return true as a method of error checking
-    switch(direction){
-        case FACING_NORTH:
-            //If checking North
-            return robot.maze[robot.yCoord-1][robot.xCoord].visited;
-        case FACING_EAST:
-            //If checking East
-            return robot.maze[robot.yCoord][robot.xCoord+1].visited;
-        case FACING_SOUTH:
-            //If checking South
-            return robot.maze[robot.yCoord+1][robot.xCoord].visited;
-        case FACING_WEST:
-            //If checking West
-            return robot.maze[robot.yCoord][robot.xCoord-1].visited;
-        default:
-            FA_PlayNote(100,100);
-            FA_DelayMillis(500);
-            FA_PlayNote(100,100);
-            return false;
-    }
-}
-
 void moveToNextCell(){
     //Move forward given distance to next cell
     //We are going to assume that the next cell is 15cm forward of the current location so we just want to move 15 cm right?
@@ -175,10 +148,10 @@ void moveToNextCell(){
     // Read wheel encoder current value
     // 1 unit = 0.32 mm of travel
     // 150 / 0.32 = 468.75 Therefore roughly 469
-
+    /*
     FA_SetDriveSpeed(30);
     FA_Forwards(150);
-
+    */
     /*FA_ResetEncoders();
     FA_SetMotors(MOTOR_SPEED_LEFT,MOTOR_SPEED_RIGHT);
 
@@ -190,6 +163,52 @@ void moveToNextCell(){
     //Stop now
     FA_SetMotors(0,0);
     FA_ResetEncoders();*/
+
+    //The Idea is that if the sensor values for FRONT RIGHT or FRONT LEFT get too high I need to correct by stopping and
+    //Turning the opposite way to correct for it by a few degrees namely 2-5 just to correct for any inaccuracies in the
+    //turning of the robot. The robot will stop moving forwards when it crosses the black line but will then go forwards
+    //75-100 millimetres to get to the centre of the cell  95 should be ideal as the black tape is 2cm=20mm and to
+    //the centre of the cell should be 75. 95 / 0.32 = 296.875 = 297
+
+    while(FA_ReadLine(0) > IS_CELL_LINE || FA_ReadLine(1) > IS_CELL_LINE){
+        //Is not in next cell yet
+        FA_SetMotors(30,30);
+        if(FA_ReadIR(IR_FRONT_LEFT) > TOO_CLOSE_WALL){
+            FA_SetMotors(0,0);
+            FA_Backwards(10);
+            FA_Right(8);
+        }
+        if(FA_ReadIR(IR_FRONT_RIGHT) > TOO_CLOSE_WALL){
+            FA_SetMotors(0,0);
+            FA_Backwards(10);
+            FA_Left(8);
+        }
+        if(FA_ReadIR(IR_FRONT) > STOP_FORWARD_DISTANCE){
+            FA_SetMotors(0,0);
+            return;
+        }
+    }
+    FA_SetMotors(0,0);
+    FA_ResetEncoders();
+    //While the encoders are below 297 keep going forwards
+    while(FA_ReadEncoder(0) < 297 || FA_ReadEncoder(1) < 297){
+        FA_SetMotors(30,30);
+        if(FA_ReadIR(IR_FRONT_LEFT) > TOO_CLOSE_WALL){
+            FA_SetMotors(0,0);
+            FA_Backwards(10);
+            FA_Right(8);
+        }
+        if(FA_ReadIR(IR_FRONT_RIGHT) > TOO_CLOSE_WALL){
+            FA_SetMotors(0,0);
+            FA_Backwards(10);
+            FA_Left(8);
+        }
+        if(FA_ReadIR(IR_FRONT) > STOP_FORWARD_DISTANCE){
+            FA_SetMotors(0,0);
+            return;
+        }
+    }
+    FA_SetMotors(0,0);
 }
 //Moving North = y-1
 //Moving South = y+1

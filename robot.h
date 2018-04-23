@@ -19,7 +19,6 @@ int isShaded();
 int isAWall(struct robot, int);
 void fillInCell(struct robot*);
 int mapCompleted(struct robot*);
-int hasNeighbourBeenVisited(int ,struct robot);
 void moveToNextCell();
 void moveEast(struct robot*);
 void moveWest(struct robot*);
