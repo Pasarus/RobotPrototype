@@ -29,6 +29,7 @@ int main() {
         else {
             //DO NOTHING
             //Once shade found leave a "breadcrumb" on the previous cell, then follow this breadcrumb trail.
+            FA_PlayNote(100,1000);
             FA_LCDPrint("Pathing!",10,0,0,FONT_NORMAL, LCD_OPAQUE);
             FA_DelayMillis(500);
             pathingBack(&robot);
